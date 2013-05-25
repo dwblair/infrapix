@@ -1,0 +1,9 @@
+<!doctype html>
+<title>Hello from Flask</title>
+{% if inputFilename %}
+  <h1>infragram!<h1><br>
+<img src="{{originalFilename}}">
+<img src="ndvi_out.png">
+{% else %}
+  <h1>... something went wrong. Sorry!</h1>
+{% endif %}
