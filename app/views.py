@@ -71,10 +71,25 @@ def make_cmap_guassianHSV( num_segs     = 100, #number of segments
 
 
 
-def infr(imageInPath,imageOutPath):
+def nir(imageInPath,imageOutPath):
     img = mpimg.imread(imageInPath)
     red=img[:,:,0]
+    arrR=np.asarray(red).astype('float64')
+   
+    arr_nir=arrR
 
+    fig=plt.figure()
+    fig.set_frameon(False)
+    ax=fig.add_subplot(111)
+    ax.set_axis_off()
+    ax.patch.set_alpha(0.0)
+
+    nir_plot = ax.imshow(arr_nir, cmap=plt.cm.gist_gray, interpolation="nearest")
+
+    #fig.colorbar(nir_plot)
+    fig.savefig(imageOutPath)
+
+ 
 def ndvi(imageInPath,imageOutPath):
     #img1 = Image.open(imageInPath) 
     img = mpimg.imread(imageInPath)
@@ -116,7 +131,9 @@ def upload_file():
             uploadFilePath=os.path.join(app.config['UPLOAD_FOLDER'],filename)
             file.save(uploadFilePath)
             ndviFilePath=os.path.join(app.config['UPLOAD_FOLDER'],'ndvi_'+filename)
+            nirFilePath=os.path.join(app.config['UPLOAD_FOLDER'],'nir_'+filename)
             ndvi(uploadFilePath,ndviFilePath)
+            nir(uploadFilePath,nirFilePath)
             return redirect(url_for('uploaded_file',filename=filename)) 
     return '''
         <!doctype html>
@@ -144,6 +161,6 @@ def send_file(filename):
 def uploaded_file(filename):
     uploadFilePath=os.path.join(app.config['UPLOAD_FOLDER'],filename)
     ndviFilePath=os.path.join(app.config['NDVI_FOLDER'],filename)  
-    return render_template('template.html',filename='/uploads/'+filename, ndviFilename='/uploads/'+'ndvi_'+filename)
+    return render_template('template.html',filename='/uploads/'+filename, ndviFilename='/uploads/'+'ndvi_'+filename, nirFilename='/uploads/'+'nir_'+filename)
 
 
