@@ -1,5 +1,5 @@
 *.pyc
 *~
 .DS_Store
-apps/uploads
-apps/ndvi
+apps/uploads/
+apps/ndvi/
