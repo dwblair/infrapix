@@ -1,4 +1,6 @@
-infrapix-dreamhost
+infrapix
 ==================
 
-flask app for developing infragram photos, tailored to work on dreamhost
+flask app for developing infragram photos.
+try it out at infrapix.pvos.org (location subject to change very soon!) ...
+
