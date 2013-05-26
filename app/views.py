@@ -2,7 +2,6 @@ from app import app
 import os, sys
 from flask import Flask, render_template, send_from_directory, send_file, request, url_for, jsonify, redirect, Request
 
-import flask_sijax
 
 from cStringIO import StringIO
 from werkzeug import secure_filename
@@ -33,14 +32,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
 #sijax stuff
-path = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
 
 app = Flask(__name__)
-app.config['SIJAX_STATIC_PATH'] = path
-app.config['SIJAX_JSON_URI'] = '/static/js/sijax/json2.js'
-flask_sijax.Sijax(app)
-
-
 
 @app.route('/favicon.ico')
 def favicon():
