@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Infragram online image development</title>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/css/bootstrap.css') }}" />
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/slider.css') }}" />
+<style>
+	.container {
+		background: #fff;
+	}
+	#alert {
+		display: none;
+	}
+  #sl2 {
+    width: 400px;
+  }
+  #RGB {
+    height: 20px;
+    background: rgb(128, 128, 128);
+  }
+  #RC .slider-selection {
+    background: #FF8282;
+  }
+  #RC .slider-handle {
+    background: red;
+  }
+  #GC .slider-selection {
+    background: #428041;
+  }
+  #GC .slider-handle {
+    background: green;
+  }
+  #BC .slider-selection {
+    background: #8283FF;
+  }
+  #BC .slider-handle {
+    border-bottom-color: blue;
+  }
+  #R, #G, #B {
+    width: 300px;
+  }
+
+#RGB1 {
+    height: 20px;
+    background: rgb(128, 128, 128);
+  }
+  #RC1 .slider-selection {
+    background: #FF8282;
+  }
+  #RC1 .slider-handle {
+    background: red;
+  }
+  #GC1 .slider-selection {
+    background: #428041;
+  }
+  #GC1 .slider-handle {
+    background: green;
+  }
+  #BC1 .slider-selection {
+    background: #8283FF;
+  }
+  #BC1 .slider-handle {
+    border-bottom-color: blue;
+  }
+  #R1, #G1, #B1 {
+    width: 300px;
+  }
+
+#RGB2 {
+    height: 20px;
+    background: rgb(128, 128, 128);
+  }
+  #RC2 .slider-selection {
+    background: #FF8282;
+  }
+  #RC2 .slider-handle {
+    background: red;
+  }
+  #GC2 .slider-selection {
+    background: #428041;
+  }
+  #GC2 .slider-handle {
+    background: green;
+  }
+  #BC2 .slider-selection {
+    background: #8283FF;
+  }
+  #BC2 .slider-handle {
+    border-bottom-color: blue;
+  }
+  #R2, #G2, #B2 {
+    width: 300px;
+  }
+
+
+
+  #eg .slider-selection {
+    background: #BABABA;
+  }
+	</style>
+
+
+<script src="js/google-code-prettify/prettify.js"></script>
+    <script src="{{ url_for('static', filename='js/modernizr.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-slider.js') }}"></script>
+	<script>
+		$(function(){
+			window.prettyPrint && prettyPrint();
+
+        $('#sl1').slider({
+          formater: function(value) {
+            return 'Current value: '+value;
+          }
+        });
+        $('#sl2').slider();
+
+        var RGBChange = function() {
+          $('#RGB').css('background', 'rgb('+r.getValue()+','+g.getValue()+','+b.getValue()+')')
+        };
+
+        var r = $('#R').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var g = $('#G').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var b = $('#B').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+
+        $('#eg input').slider();
+    });
+  </script>
+
+  </head>
+  <body class="container">
+<div class="page-header">
+<p><strong>infragram:</strong> a near-infrared imaging platform built by the <a href="http://publiclab.org">Public Lab</a> community.</p>
+</div>
+
+{% if filename %}
+	<div class="row show-grid">
+              <div class="span4"><center><h3>Original</h3></center></div>
+              <div class="span4"><center><h3>NDVI</center></h3></div>
+              <div class="span4"><center><h3>NIR</center></h3></div>
+            </div>
+            <div class="row show-grid">
+              <div class="span4"><img src="{{filename}}"></div>
+              <div class="span4"><img src="{{ndviFilename}}"></div>
+              <div class="span4"><img src="{{nirFilename}}"></div>
+            </div>
+<br>
+
+         
+{% else %}
+<h2>sorry, image upload failed. wrong format?</h2>
+{% endif %}
+
+
+
+<h3>Saving and sharing</h3>
+
+<form>
+  <fieldset>
+    <!--<legend>Save and share your images:</legend>-->
+    <label>Name your photoset:</label>
+    <input type="text" placeholder="new filename ...">
+    <span class="help-block">(please omit the ".PNG", ".JPG", or other filename suffix)</span>
+    <label class="checkbox">
+      <input type="checkbox"> Also save my photos on infragram.org
+    </label>
+    <button type="submit" class="btn">Download</button>
+  </fieldset>
+</form>
+
+<!--
+<div class="input-append">
+  <input class="span2" id="appendedInputButton" type="text">
+  <button class="btn" type="button">Go!</button>
+</div>
+-->
+<h3>Custom colormap</h3>
+          <div class="well">
+            <p>
+Please select the proportion of R, G, and B input that will be exported as the "R" channel:
+</p>
+<p>
+            <b>R</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="RC" id="R" data-slider-tooltip="hide" data-slider-handle="square" >
+            </p>
+            <p>
+            <b>G</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="GC" id="G" data-slider-tooltip="hide" data-slider-handle="round" >
+            </p>
+            <p>
+            <b>B</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="B" data-slider-tooltip="hide" data-slider-handle="triangle" >
+            </p>
+            <div id="RGB"></div>
+
+          </div>
+
+ <div class="well">
+<p>
+Please select the proportion of R, G, and B input that will be exported as the "G" channel:
+</p>
+            <p>
+            <b>R</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="RC1" id="R1" data-slider-tooltip="hide" data-slider-handle="square" >
+            </p>
+            <p>
+            <b>G</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="GC1" id="G1" data-slider-tooltip="hide" data-slider-handle="round" >
+            </p>
+            <p>
+            <b>B</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC1" id="B1" data-slider-tooltip="hide" data-slider-handle="triangle" >
+            </p>
+            <div id="RGB1"></div>
+
+          </div>
+
+ <div class="well">
+<p>
+Please select the proportion of R, G, and B input that will be exported as the "B" channel:
+</p>
+            <p>
+            <b>R</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="RC2" id="R2" data-slider-tooltip="hide" data-slider-handle="square" >
+            </p>
+            <p>
+            <b>G</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="GC2" id="G2" data-slider-tooltip="hide" data-slider-handle="round" >
+            </p>
+            <p>
+            <b>B</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC2" id="B2" data-slider-tooltip="hide" data-slider-handle="triangle" >
+            </p>
+            <div id="RGB2"></div>
+
+          </div>
+
+
+
+  <div class="span9 columns">
+          <h3>Other options ...</h3>
+          <p>Brightness</p>
+          <div class="well">
+            <input type="text" class="span2" value="4" id="sl1" >
+          </div>
+          <p>Select range within NDVI histogram</p>
+          <div class="well">
+            Filter by interval: <b>0</b> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="[20,50]" id="sl2" > <b>255</b>
+          </div>
+          
+          <p>Tune other awesome parameters</p>
+          <div class="well">
+          <table id="eg">
+            <tbody>
+              <tr>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-13" data-slider-orientation="vertical" data-slider-selection="after" data-slider-tooltip="hide">
+                </td>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-11" data-slider-orientation="vertical" data-slider-selection="after" data-slider-tooltip="hide">
+                </td>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-6" data-slider-orientation="vertical" data-slider-selection="after" data-slider-tooltip="hide">
+                </td>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-4" data-slider-orientation="vertical" data-slider-selection="after" data-slider-tooltip="hide">
+                </td>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-6" data-slider-orientation="vertical" data-slider-selection="after" data-slider-tooltip="hide">
+                </td>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-11" data-slider-orientation="vertical" data-slider-selection="after"data-slider-tooltip="hide">
+                </td>
+                <td>
+                  <input type="text" class="span2" value="" data-slider-min="-20" data-slider-max="20" data-slider-step="1" data-slider-value="-14" data-slider-orientation="vertical" data-slider-selection="after"data-slider-tooltip="hide">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <hr>
+
+
+<script src="js/google-code-prettify/prettify.js"></script>
+    <script src="{{ url_for('static', filename='js/modernizr.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-slider.js') }}"></script>
+	<script>
+		$(function(){
+			window.prettyPrint && prettyPrint();
+
+        $('#sl1').slider({
+          formater: function(value) {
+            return 'Current value: '+value;
+          }
+        });
+        $('#sl2').slider();
+
+        var RGBChange = function() {
+          $('#RGB').css('background', 'rgb('+r.getValue()+','+g.getValue()+','+b.getValue()+')')
+        };
+
+        var r = $('#R').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var g = $('#G').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var b = $('#B').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+
+var RGBChange1 = function() {
+          $('#RGB1').css('background', 'rgb('+r1.getValue()+','+g1.getValue()+','+b1.getValue()+')')
+        };
+
+        var r1 = $('#R1').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var g1 = $('#G1').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var b1 = $('#B1').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+
+var RGBChange2 = function() {
+          $('#RGB2').css('background', 'rgb('+r2.getValue()+','+g2.getValue()+','+b2.getValue()+')')
+        };
+
+        var r2 = $('#R2').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var g2 = $('#G2').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+        var b2 = $('#B2').slider()
+                .on('slide', RGBChange)
+                .data('slider');
+
+
+
+        $('#eg input').slider();
+    });
+  </script>
+</body>
+</html>
