@@ -1,5 +1,5 @@
 from app import app
-import os
+import os, sys
 from flask import Flask, render_template, send_from_directory, send_file, request, url_for, jsonify, redirect, Request
 
 import flask_sijax
@@ -39,6 +39,7 @@ app = Flask(__name__)
 app.config['SIJAX_STATIC_PATH'] = path
 app.config['SIJAX_JSON_URI'] = '/static/js/sijax/json2.js'
 flask_sijax.Sijax(app)
+
 
 
 @app.route('/favicon.ico')
@@ -94,35 +95,42 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    if request.method=='POST':
-        file=request.files['file']
-        if file: 
-            filename=file.filename
-            uploadFilePath=os.path.join(app.config['UPLOAD_FOLDER'],filename)
-            file.save(uploadFilePath)
-            ndviFilePath=os.path.join(app.config['UPLOAD_FOLDER'],'ndvi_'+filename)
-            nirFilePath=os.path.join(app.config['UPLOAD_FOLDER'],'nir_'+filename)
-            ndvi(uploadFilePath,ndviFilePath)
-            nir(uploadFilePath,nirFilePath)
-            return redirect(url_for('uploaded_file',filename=filename)) 
-    return '''
-        <!doctype html>
-        <img src="http://i.publiclab.org/system/images/photos/000/000/264/medium/main-image-med.jpg"><br>
-        <title>Infragram Online!</title>
-<br>
-Welcome to Public Lab's online service for generating NDVI from near-infrared pictures!</br><br>
+@app.route('/')
+@app.route('/index')
+def index():
+    return "Hello, World!"
 
-        <h2>Upload new file</h2>
 
-To upload a file for processing, please click on the "Choose File" button below.  After you've selected a file, click "Upload".
 
-        <form action="" method=post enctype=multipart/form-data>
-          <p><input type=file name=file>
-                 <input type=submit value=Upload>
-        </form>
-        '''
+#@app.route('/', methods=['GET', 'POST'])
+#def upload_file():
+#    if request.method=='POST':
+#        file=request.files['file']
+#        if file: 
+#            filename=file.filename
+#            uploadFilePath=os.path.join(app.config['UPLOAD_FOLDER'],filename)
+#            file.save(uploadFilePath)
+#            ndviFilePath=os.path.join(app.config['UPLOAD_FOLDER'],'ndvi_'+filename)
+#            nirFilePath=os.path.join(app.config['UPLOAD_FOLDER'],'nir_'+filename)
+#            ndvi(uploadFilePath,ndviFilePath)
+#            nir(uploadFilePath,nirFilePath)
+#            return redirect(url_for('uploaded_file',filename=filename)) 
+#    return '''
+#        <!doctype html>
+#        <img src="http://i.publiclab.org/system/images/photos/000/000/264/medium/main-image-med.jpg"><br>
+#        <title>Infragram Online!</title>
+#<br>
+#Welcome to Public Lab's online service for generating NDVI from near-infrared pictures!</br><br>
+
+#        <h2>Upload new file</h2>
+
+#To upload a file for processing, please click on the "Choose File" button below.  After you've selected a file, click "Upload".
+
+#        <form action="" method=post enctype=multipart/form-data>
+#          <p><input type=file name=file>
+#                 <input type=submit value=Upload>
+#        </form>
+#        '''
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
