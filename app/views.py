@@ -15,8 +15,14 @@ import numpy as np
 
 from PIL import Image
 
-UPLOAD_FOLDER = '/home/asine/infrapix.pvos.org/app/uploads'
-NDVI_FOLDER = '/home/asine/infrapix.pvos.org/app/ndvi'
+import flask_sijax
+
+#UPLOAD_FOLDER = '/home/asine/infrapix.pvos.org/app/uploads'
+#NDVI_FOLDER = '/home/asine/infrapix.pvos.org/app/ndvi'
+
+UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')
+NDVI_FOLDER = os.path.join(app.root_path, 'ndvi')
+
 
 #UPLOAD_FOLDER = '/home/asine/infrapix.pvos.org/public/uploads'
 #NDVI_FOLDER = '/home/asine/infrapix.pvos.org/public/ndvi'
@@ -26,6 +32,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['NDVI_FOLDER'] = NDVI_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
 
 #@app.route('/')
 #@app.route('/index')
