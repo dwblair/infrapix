@@ -1,6 +1,14 @@
 <!doctype html>
-
+<html lang="en">
+<head>
 <title>Infrapix!</title>
+
+<link type="text/css" rel="stylesheet" href='static/css/test.css'/>
+
+</head>
+
+
+<body>
 {% if filename %}
 <h2>Original:<h2>
 <img width=400 src="{{filename}}">
@@ -13,3 +21,5 @@
 {% else %}
   <h1>no image for whatever reason</h1>
 {% endif %}
+</body>
+</html>
