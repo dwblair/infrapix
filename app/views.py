@@ -2,6 +2,8 @@ from app import app
 import os
 from flask import Flask, render_template, send_from_directory, send_file, request, url_for, jsonify, redirect, Request
 
+import flask_sijax
+
 from cStringIO import StringIO
 from werkzeug import secure_filename
 
@@ -15,11 +17,13 @@ import numpy as np
 
 from PIL import Image
 
-UPLOAD_FOLDER = '/home/asine/infrapix.pvos.org/app/uploads'
-NDVI_FOLDER = '/home/asine/infrapix.pvos.org/app/ndvi'
+# uploading parameters
 
-#UPLOAD_FOLDER = '/home/asine/infrapix.pvos.org/public/uploads'
-#NDVI_FOLDER = '/home/asine/infrapix.pvos.org/public/ndvi'
+#UPLOAD_FOLDER = '/home/asine/infrapix.pvos.org/app/uploads'
+#NDVI_FOLDER = '/home/asine/infrapix.pvos.org/app/ndvi'
+
+UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')
+NDVI_FOLDER = os.path.join(app.root_path, 'ndvi')
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -27,48 +31,19 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['NDVI_FOLDER'] = NDVI_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-#@app.route('/')
-#@app.route('/index')
-#def index():
-#    return "Hello, World!"
 
-@app.route('/woah')
-def yabber():
-    return "no no no!"
+#sijax stuff
+path = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
+
+app = Flask(__name__)
+app.config['SIJAX_STATIC_PATH'] = path
+app.config['SIJAX_JSON_URI'] = '/static/js/sijax/json2.js'
+flask_sijax.Sijax(app)
+
 
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'ico/favicon.ico')
-
-### generating ndvi
-
-def make_cmap_guassianHSV( num_segs     = 100, #number of segments
-                           bandwidth    = 0.25,
-                           red_center   = 1.00,
-                           green_center = 0.75,
-                           blue_center  = 0.50,
-                           name = "gaussianHSV"
-                         ):
-    #this is the color index
-    X = np.linspace(0.0,1.0,num_segs)
-
-    Y_R  = np.exp(-(X - red_center  )**2/bandwidth**2)
-    Y_G  = np.exp(-(X - green_center)**2/bandwidth**2)
-    Y_B  = np.exp(-(X - blue_center )**2/bandwidth**2)
-
-    segs_R = np.vstack((X,Y_R,Y_R)).transpose()
-    segs_G = np.vstack((X,Y_G,Y_G)).transpose()
-    segs_B = np.vstack((X,Y_B,Y_B)).transpose()
-    ##make colormap
-    cdict = {
-    'red'  :  segs_R,
-    'green':  segs_G,
-    'blue' :  segs_B,
-    }
-
-    cmap = matplotlib.colors.LinearSegmentedColormap(name,cdict,num_segs)
-    return cmap
-
 
 
 def nir(imageInPath,imageOutPath):
@@ -111,10 +86,7 @@ def ndvi(imageInPath,imageOutPath):
     ax.set_axis_off()
     ax.patch.set_alpha(0.0)
 
-    #custom_cmap=make_cmap_gaussianHSV(bandwidth=0.01,num_segs=1024)
     ndvi_plot = ax.imshow(arr_ndvi, cmap=plt.cm.spectral, interpolation="nearest")
-    #ndvi_plot = ax.imshow(arr_ndvi, cmap=custom_cmap, interpolation="nearest")
-
     fig.colorbar(ndvi_plot)
     fig.savefig(imageOutPath)
 
@@ -162,5 +134,4 @@ def uploaded_file(filename):
     uploadFilePath=os.path.join(app.config['UPLOAD_FOLDER'],filename)
     ndviFilePath=os.path.join(app.config['NDVI_FOLDER'],filename)  
     return render_template('template.html',filename='/uploads/'+filename, ndviFilename='/uploads/'+'ndvi_'+filename, nirFilename='/uploads/'+'nir_'+filename)
-
 
