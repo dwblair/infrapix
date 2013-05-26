@@ -5,3 +5,10 @@ apps/uploads/
 apps/ndvi/
 apps/uploads
 apps/uploads/*
+*.PNG
+*.png
+*.jpeg
+*.JPG
+*.tiff
+*.TIFF
+
