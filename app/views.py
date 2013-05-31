@@ -25,7 +25,7 @@ from matplotlib import pyplot
 #import numpy
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy as numpy
 
 from PIL import Image
 
@@ -102,7 +102,7 @@ def favicon():
 def nir(imageInPath,imageOutPath):
     img = mpimg.imread(imageInPath)
     red=img[:,:,0]
-    arrR=np.asarray(red).astype('float64')
+    arrR=numpy.asarray(red).astype('float64')
    
     arr_nir=arrR
 
@@ -119,32 +119,36 @@ def nir(imageInPath,imageOutPath):
 
  
 def ndvi(imageInPath,imageOutPath):
-    #img1 = Image.open(imageInPath) 
-    img = mpimg.imread(imageInPath)
-    red=img[:,:,0]
-    green=img[:,:,1]
-    blue=img[:,:,2]
+	img=Image.open(imageInPath)
+	imgR, imgG, imgB = img.split() #get channels
+	arrR = numpy.asarray(imgR).astype('float64')
+	arrB = numpy.asarray(imgB).astype('float64')
+	"""img = mpimg.imread(imageInPath)
+	red=img[:,:,0]
+	green=img[:,:,1]
+	blue=img[:,:,2]
 
-    arrR=np.asarray(red).astype('float64')
-    arrG=np.asarray(green).astype('float64')
-    arrB=np.asarray(blue).astype('float64')
-    num=arrR - arrB
-    num=(arrR - arrB)
-    denom=(arrR + arrB)
-    arr_ndvi=num/denom
-    
-    fig=plt.figure()
-    fig.set_frameon(False)
-    ax=fig.add_subplot(111)
-    ax.set_axis_off()
-    ax.patch.set_alpha(0.0)
+	arrR=np.asarray(red).astype('float64')
+	arrG=np.asarray(green).astype('float64')
+	arrB=np.asarray(blue).astype('float64')
+	"""
+	num=arrR - arrB
+	num=(arrR - arrB)
+	denom=(arrR + arrB)
+	arr_ndvi=num/denom
 
-    #custom_cmap=make_cmap_gaussianHSV(bandwidth=0.01,num_segs=1024)
-    ndvi_plot = ax.imshow(arr_ndvi, cmap=plt.cm.spectral, interpolation="nearest")
-    #ndvi_plot = ax.imshow(arr_ndvi, cmap=custom_cmap, interpolation="nearest")
+	fig=plt.figure()
+	fig.set_frameon(False)
+	ax=fig.add_subplot(111)
+	ax.set_axis_off()
+	ax.patch.set_alpha(0.0)
 
-    fig.colorbar(ndvi_plot)
-    fig.savefig(imageOutPath)
+	#custom_cmap=make_cmap_gaussianHSV(bandwidth=0.01,num_segs=1024)
+	ndvi_plot = ax.imshow(arr_ndvi, cmap=plt.cm.spectral, interpolation="nearest")
+	#ndvi_plot = ax.imshow(arr_ndvi, cmap=custom_cmap, interpolation="nearest")
+
+	fig.colorbar(ndvi_plot)
+	fig.savefig(imageOutPath)
 
 def allowed_file(filename):
     return '.' in filename and \
