@@ -137,8 +137,59 @@ def ndvi(imageInPath,imageOutPath):
 	denom=(arrR + arrB)
 	arr_ndvi=num/denom
 
-	fig=plt.figure()
+	## adding higher-res code
+	AUTO_CONTRAST = False
+	img_w, img_h = img.size
+	dpi   = 600#int(img_w/fig_w)
+	vmin  = -1.0 #most negative NDVI value
+	vmax  =  1.0 #most positive NDVI value
+	if AUTO_CONTRAST:
+		vmin = arr_ndvi.min()
+		vmax = arr_ndvi.max() 
+
+	fig_w = img_w/dpi
+	fig_h = img_h/dpi
+	fig = plt.figure(figsize=(fig_w,fig_h), dpi=dpi)
 	fig.set_frameon(False)
+
+	#make an axis for the image filling the whole figure except colorbar space
+	ax_rect = [0.0, #left
+           0.0, #bottom
+           1.0, #width
+           1.0] #height
+	ax = fig.add_axes(ax_rect)
+	ax.yaxis.set_ticklabels([])
+	ax.xaxis.set_ticklabels([])   
+	ax.set_axis_off()
+	ax.patch.set_alpha(0.0)
+
+	axes_img = ax.imshow(arr_ndvi,
+			              cmap = plt.cm.spectral, 
+			              vmin = vmin,
+			              vmax = vmax,
+			              aspect = 'equal',
+			              #interpolation="nearest"
+			             )
+	# Add colorbar
+	#make an axis for colorbar
+	cax = fig.add_axes([0.95,
+			            0.05,
+			            0.025,
+			            0.90]
+			           ) #fill the whole figure
+	cbar = fig.colorbar(axes_img, cax=cax)  #this resizes the axis
+
+	#fig.tight_layout(pad=0)
+	fig.savefig(imageOutPath, 
+			    dpi=dpi,
+			    bbox_inches='tight',
+			    pad_inches=0.0, 
+			   )
+	
+
+"""
+	#fig=plt.figure()
+	#fig.set_frameon(False)
 	ax=fig.add_subplot(111)
 	ax.set_axis_off()
 	ax.patch.set_alpha(0.0)
@@ -149,6 +200,7 @@ def ndvi(imageInPath,imageOutPath):
 
 	fig.colorbar(ndvi_plot)
 	fig.savefig(imageOutPath)
+"""
 
 def allowed_file(filename):
     return '.' in filename and \
